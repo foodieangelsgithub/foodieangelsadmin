@@ -1,0 +1,817 @@
+
+/*Extra small devices (portrait phones, less than 576px)*/
+/* ---------------------------------------------------- */
+@media (max-width: 575px){
+
+    /* ********************************************************
+    ESTILOS GENERALES
+    ******************************************************** */
+
+    /* ****** */
+    /* tablas */
+    /* ****** */
+
+    /* Force table to not be like tables anymore */
+    table.tablaResponsiva,table.tablaResponsiva thead,table.tablaResponsiva tbody,table.tablaResponsiva th,table.tablaResponsiva td,table.tablaResponsiva tr { 
+	    display: block; 
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    table.tablaResponsiva thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table.tablaResponsiva tr {
+        border: 1px solid #ccc;
+        border-bottom: 5px solid #ccc;
+    }
+    
+    table.tablaResponsiva td{ 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #d1d1d1;
+        position: relative;
+        padding-left:50%; 
+    }
+
+    table.tablaResponsiva td.acciones{
+        padding-left:1em;
+        background: #d1d1d1;
+        text-align:center;
+        font-size:1.3em;
+    }
+
+    table.tablaResponsiva td.acciones a+a{
+        margin-left:1em;
+    }
+
+    table.tablaResponsiva td:last-child{
+        border-bottom: none;
+    }
+
+    table.tablaResponsiva td:first-child{
+        border-top: none;
+    }
+
+    table.tablaResponsiva td .titfila {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px;
+		padding-left: 0.6em; 
+		white-space: nowrap;
+		font-weight:bold;
+}
+
+	/*
+	Label the data
+	*/
+/*
+	table.tablaResponsiva td:nth-of-type(1):before{
+		content: "Empresa:";
+	}
+	table.tablaResponsiva td:nth-of-type(2):before {
+		content: "Empresa 2:";
+	}
+	table.tablaResponsiva td:nth-of-type(3):before {
+		content: "Importe:";
+	}
+*/
+
+
+    .preTable .botones,
+    .postTable .botones
+    {
+        width: 100% !important;
+    }
+
+    .preTable .botones button,
+    .postTable .botones button
+    {
+        width: 100% !important;
+        margin-bottom: 1.5rem;
+    }
+
+
+    table.table td.fechaNacim input{
+        display:initial
+      }
+      
+      table.table td.fechaNacim input.dia{
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      table.table td.fechaNacim input.mes{
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      table.table td.fechaNacim input.anio{
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+
+    /* ********************************************************
+    CABECERA
+    ******************************************************** */
+    /* header de la página cuando se muestra el menú lateral */
+    header.menu{
+        left:0;
+    }
+
+    /* ********************************************************
+    CUERPO
+    ******************************************************** */
+
+    /* ******************* */
+    /* Cuerpo de la página */
+    /* ******************* */
+
+    main .cuerpo{
+        padding: 20px 30px 30px 30px;
+        font-size: 1.4rem;
+    }
+
+    /* cuerpo de la página cuando se muestra el menú lateral */
+    main .cuerpo.menu{
+        left:0;
+    }
+
+    main .cuerpo h2.titulo{
+        margin-bottom: 3rem;
+        font-size: 2rem;
+    }
+
+    main .cuerpo .zonaBotones button{
+        width: 100%;
+    }
+
+    /* ****************************************************** */
+    /* PARTES */
+    /******************************************************** */
+
+    /* ---------------------------- */
+    /* Portada                      */
+    /* ---------------------------- */
+
+    main.portada{
+        padding: 3rem;
+    }
+
+    /* ---------------------------- */
+    /* Caja de login                */
+    /* ---------------------------- */
+
+    .cajalogin{
+        padding: 3rem 0 1rem 0;
+        width: 100%;
+    }
+
+    .cajalogin .logo img{
+        width: 70px;
+    }
+
+    .cajalogin h1{
+        font-size: 2rem;
+    }
+
+    .cajalogin form .input-group-text i{
+        font-size: 1.5rem !important;
+    }
+
+    .cajalogin form input{
+        font-size: 1.5rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .cajalogin form .acciones{
+        margin-top: 3rem;
+    }
+
+    /* ************** */
+    /* menú principal */
+    /* ************** */
+    main .menuPpal i.toggleMenu{
+        display: block;
+    }
+    
+    /* ************* */
+    /* caja auxiliar */
+    /* ************* */
+    .cajaAuxiliar{
+        padding: 30px 10px 30px 10px;
+    }
+
+    /* **************** */
+    /* acordeón filtros */
+    /* **************** */
+    #accordionFiltros .card-body{
+        padding: 30px 10px 30px 10px;
+    }
+
+    /* ************* */
+    /*    filtros     */
+    /* ************* */
+
+    #accordionFiltros .card-body .botones button,
+    .cajaAuxiliar .botones button
+    {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    /*-------------------------------*/
+    /*-- formulario de donaciones  --*/
+    /*-------------------------------*/
+    .formDonaciones img{
+        margin-top: 3rem;
+    }
+
+    /*--------------------*/
+    /*-- notificaciones --*/
+    /*--------------------*/
+    #notificacion{
+        width: 90%;
+        margin-left: -45%;
+    }
+
+    /*--------------------*/
+    /*--    horario     --*/
+    /*--------------------*/
+
+    /* Edición */
+
+    .horarioEdit .elemento .accion{
+        padding-top: 0;
+        padding-left: 0;
+    }
+
+
+}
+
+
+
+
+/*Small devices (landscape phones, 576px and up)*/
+/* -------------------------------------------- */
+@media (min-width: 576px) and (max-width: 767px){
+
+    /* ********************************************************
+    ESTILOS GENERALES
+    ******************************************************** */
+    /* ****** */
+    /* tablas */
+    /* ****** */
+
+    /* Force table to not be like tables anymore */
+    table.tablaResponsiva,table.tablaResponsiva thead,table.tablaResponsiva tbody,table.tablaResponsiva th,table.tablaResponsiva td,table.tablaResponsiva tr { 
+	    display: block; 
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    table.tablaResponsiva thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table.tablaResponsiva tr {
+        border: 1px solid #ccc;
+    }
+
+    table.tablaResponsiva td{ 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #d1d1d1;
+        position: relative;
+        padding-left:50%; 
+    }
+
+    table.tablaResponsiva td.acciones{
+        padding-left:1em;
+        background: #d1d1d1;
+        text-align:center;
+        font-size:1.3em;
+    }
+
+    table.tablaResponsiva td.acciones a+a{
+        margin-left:1em;
+    }
+
+    table.tablaResponsiva td:last-child{
+        border-bottom: none;
+    }
+
+    table.tablaResponsiva td:first-child{
+        border-top: none;
+    }
+
+    table.tablaResponsiva td .titfila {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px;
+		padding-left: 0.6em; 
+		white-space: nowrap;
+		font-weight:bold;
+}
+
+	/*
+	Label the data
+	*/
+/*
+	table.tablaResponsiva td:nth-of-type(1):before{
+		content: "Empresa:";
+	}
+	table.tablaResponsiva td:nth-of-type(2):before {
+		content: "Empresa 2:";
+	}
+	table.tablaResponsiva td:nth-of-type(3):before {
+		content: "Importe:";
+	}
+*/
+
+
+    .preTable .botones,
+    .postTable .botones
+    {
+        width: 100% !important;
+    }
+
+    .preTable .botones button,
+    .postTable .botones button
+    {
+        width: 100% !important;
+        margin-bottom: 1.5rem;
+    }
+
+    /* ********************************************************
+    CABECERA
+    ******************************************************** */
+    /* header de la página cuando se muestra el menú lateral */
+    header.menu{
+        left:0;
+    }
+
+    /* ********************************************************
+    CUERPO
+    ******************************************************** */
+
+    /* ******************* */
+    /* Cuerpo de la página */
+    /* ******************* */
+
+    main .cuerpo{
+        padding: 20px 30px 30px 30px;
+        font-size: 1.4rem;
+    }
+
+    /* cuerpo de la página cuando se muestra el menú lateral */
+    main .cuerpo.menu{
+        left:0;
+    }
+
+    main .cuerpo h2.titulo{
+        margin-bottom: 3rem;
+        font-size: 2rem;
+    }
+
+    main .cuerpo .zonaBotones button{
+        width: 100%;
+    }
+
+    /* ****************************************************** */
+    /* PARTES */
+    /******************************************************** */
+
+    /* ---------------------------- */
+    /* Portada                      */
+    /* ---------------------------- */
+
+    main.portada{
+        padding: 0;
+    }
+
+    /* ---------------------------- */
+    /* Caja de login                */
+    /* ---------------------------- */
+
+    .cajalogin{
+        padding: 3rem 0 1rem 0;
+        width: 450px;
+    }
+
+    .cajalogin .logo img{
+        width: 70px;
+    }
+
+    .cajalogin h1{
+        font-size: 2rem;
+    }
+
+    .cajalogin form .input-group-text i{
+        font-size: 1.5rem !important;
+    }
+
+    .cajalogin form input{
+        font-size: 1.5rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .cajalogin form .acciones{
+        margin-top: 3rem;
+    }
+
+    /* ************* */
+    /*    filtros    */
+    /* ************* */
+    #accordionFiltros .card-body .botones button,
+    .cajaAuxiliar .botones button
+    {
+        width: 100%;
+        margin-bottom: 1.5rem;
+    }
+
+    /* ************** */
+    /* menú principal */
+    /* ************** */
+    main .menuPpal i.toggleMenu{
+        display: block;
+    }
+
+    /*-------------------------------*/
+    /*-- formulario de donaciones  --*/
+    /*-------------------------------*/
+    .formDonaciones img{
+        margin-top: 3rem;
+    }
+
+    /*--------------------*/
+    /*-- notificaciones --*/
+    /*--------------------*/
+    #notificacion{
+        width: 90%;
+        margin-left: -45%;
+    }
+
+    /*--------------------*/
+    /*--    horario     --*/
+    /*--------------------*/
+
+    /* Edición */
+
+    .horarioEdit .elemento .accion{
+        padding-top: 0;
+        padding-left: 0;
+    }
+  
+}
+
+
+
+
+/*Medium devices (tablets, 768px and up)*/
+/* ------------------------------------ */
+@media (min-width: 768px) and (max-width: 991px){
+
+    /* ********************************************************
+    ESTILOS GENERALES
+    ******************************************************** */
+    /* ****** */
+    /* tablas */
+    /* ****** */
+
+    /* Force table to not be like tables anymore */
+    table.tablaResponsiva,table.tablaResponsiva thead,table.tablaResponsiva tbody,table.tablaResponsiva th,table.tablaResponsiva td,table.tablaResponsiva tr { 
+	    display: block; 
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    table.tablaResponsiva thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table.tablaResponsiva tr {
+        border: 1px solid #ccc;
+    }
+
+    table.tablaResponsiva td{ 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #d1d1d1;
+        position: relative;
+        padding-left:50%; 
+    }
+
+    table.tablaResponsiva td.acciones{
+        padding-left:1em;
+        background: #d1d1d1;
+        text-align:center;
+        font-size:1.3em;
+    }
+
+    table.tablaResponsiva td.acciones a+a{
+        margin-left:1em;
+    }
+
+    table.tablaResponsiva td:last-child{
+        border-bottom: none;
+    }
+
+    table.tablaResponsiva td:first-child{
+        border-top: none;
+    }
+
+    table.tablaResponsiva td .titfila {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px;
+		padding-left: 0.6em; 
+		white-space: nowrap;
+		font-weight:bold;
+}
+
+	/*
+	Label the data
+	*/
+/*
+	table.tablaResponsiva td:nth-of-type(1):before{
+		content: "Empresa:";
+	}
+	table.tablaResponsiva td:nth-of-type(2):before {
+		content: "Empresa 2:";
+	}
+	table.tablaResponsiva td:nth-of-type(3):before {
+		content: "Importe:";
+	}
+*/
+
+
+    .preTable .botones,
+    .postTable .botones
+    {
+        width: 100% !important;
+    }
+
+    .preTable .botones button,
+    .postTable .botones button
+    {
+        width: 100% !important;
+        margin-bottom: 1.5rem;
+    }
+
+
+    /* ********************************************************
+    CUERPO
+    ******************************************************** */
+
+    /* ******************* */
+    /* Cuerpo de la página */
+    /* ******************* */
+
+    main .cuerpo{
+        padding: 20px 30px 30px 30px;
+        font-size: 1.4rem;
+    }
+
+    /* cuerpo de la página cuando se muestra el menú lateral */
+    main .cuerpo.menu{
+        left:0;
+    }
+
+    main .cuerpo h2.titulo{
+        margin-bottom: 3rem;
+        font-size: 2rem;
+    }
+
+    /* ****************************************************** */
+    /* PARTES */
+    /******************************************************** */
+
+    /* ---------------------------- */
+    /* Portada                      */
+    /* ---------------------------- */
+
+    main.portada{
+        padding: 0;
+    }
+    
+    /* ---------------------------- */
+    /* Caja de login                */
+    /* ---------------------------- */
+
+    .cajalogin{
+        padding: 3rem 0 1rem 0;
+        width: 450px;
+    }
+
+    .cajalogin .logo img{
+        width: 70px;
+    }
+
+    .cajalogin h1{
+        font-size: 2rem;
+    }
+
+    .cajalogin form .input-group-text i{
+        font-size: 1.5rem !important;
+    }
+
+    .cajalogin form input{
+        font-size: 1.5rem !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .cajalogin form .acciones{
+        margin-top: 3rem;
+    }
+
+    /*-------------------------------*/
+    /*-- formulario de donaciones  --*/
+    /*-------------------------------*/
+    .formDonaciones img{
+        margin-top: 3rem;
+    }
+
+    /*--------------------*/
+    /*-- notificaciones --*/
+    /*--------------------*/
+    #notificacion{
+        width: 75%;
+        margin-left: -37.5%;
+    }
+
+    /*--------------------*/
+    /*--    horario     --*/
+    /*--------------------*/
+
+    /* Edición */
+
+    .horarioEdit .elemento .accion{
+        padding-top: 0;
+        padding-left: 0;
+    }
+
+}
+
+
+
+
+/*Large devices (desktops, 992px and up)*/
+/* ------------------------------------ */
+@media (min-width: 992px) and (max-width: 1199px){
+
+    /* ********************************************************
+    ESTILOS GENERALES
+    ******************************************************** */
+
+    /* ****** */
+    /* tablas */
+    /* ****** */
+
+    /* Force table to not be like tables anymore */
+    table.tablaResponsiva,table.tablaResponsiva thead,table.tablaResponsiva tbody,table.tablaResponsiva th,table.tablaResponsiva td,table.tablaResponsiva tr { 
+	    display: block; 
+    }
+
+    /* Hide table headers (but not display: none;, for accessibility) */
+    table.tablaResponsiva thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    table.tablaResponsiva tr {
+        border: 1px solid #ccc;
+    }
+
+    table.tablaResponsiva td{ 
+        /* Behave  like a "row" */
+        border: none;
+        border-bottom: 1px solid #d1d1d1;
+        position: relative;
+        padding-left:50%; 
+    }
+
+    table.tablaResponsiva td.acciones{
+        padding-left:1em;
+        background: #d1d1d1;
+        text-align:center;
+        font-size:1.3em;
+    }
+
+    table.tablaResponsiva td.acciones a+a{
+        margin-left:1em;
+    }
+
+    table.tablaResponsiva td:last-child{
+        border-bottom: none;
+    }
+
+    table.tablaResponsiva td:first-child{
+        border-top: none;
+    }
+
+    table.tablaResponsiva td .titfila {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px;
+		padding-left: 0.6em; 
+		white-space: nowrap;
+		font-weight:bold;
+}
+
+	/*
+	Label the data
+	*/
+/*
+	table.tablaResponsiva td:nth-of-type(1):before{
+		content: "Empresa:";
+	}
+	table.tablaResponsiva td:nth-of-type(2):before {
+		content: "Empresa 2:";
+	}
+	table.tablaResponsiva td:nth-of-type(3):before {
+		content: "Importe:";
+	}
+*/
+
+
+    .preTable .botones,
+    .postTable .botones
+    {
+        width: 100% !important;
+    }
+
+    .preTable .botones button,
+    .postTable .botones button
+    {
+        width: 100% !important;
+        margin-bottom: 1.5rem;
+    }
+
+    /* ****************************************************** */
+    /* PARTES */
+    /******************************************************** */
+
+    /* ---------------------------- */
+    /* Portada                      */
+    /* ---------------------------- */
+
+    main.portada{
+        padding: 0;
+    }
+
+    /*-------------------------------*/
+    /*-- formulario de donaciones  --*/
+    /*-------------------------------*/
+    .formDonaciones img{
+        margin-top: 3rem;
+    }
+    
+
+}
+
+
+
+
+/*Extra large devices (large desktops, 1200px and up)*/
+/* ------------------------------------------------- */
+@media (min-width: 1200px){
+
+    /* ****************************************************** */
+    /* PARTES */
+    /******************************************************** */
+
+    /* ---------------------------- */
+    /* Portada                      */
+    /* ---------------------------- */
+
+    main.portada{
+        padding: 0;
+    }
+
+
+}

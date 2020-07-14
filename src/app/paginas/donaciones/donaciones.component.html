@@ -1,0 +1,511 @@
+
+<app-visor *ngIf="generalService.visorVisible"></app-visor>
+
+<app-notificacion></app-notificacion>
+
+<app-modal *ngIf="generalService.showingModals"></app-modal>
+
+<app-header [hidden]="!generalService.logueado"></app-header>
+
+<main [hidden]="!generalService.logueado">
+
+    <app-menu></app-menu>
+
+    <section class="cuerpo" [ngClass]="{'menu': generalService.menuVisible}">
+
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <!-- ZONA DE TABLA -->
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <section class="zonaTabla" [ngClass]="{'oculto': visualizacion}">
+
+            <h1 class="titulo">{{ 'general.donationsCompleted' | translate }}</h1>
+
+            <!-- FILTROS -->
+            <div class="accordion" id="accordionFiltros">
+                
+                <div class="card">
+                    <div class="card-header" id="cabeceraFiltros">
+                        <h2 class="mb-0 noselect" (click)="toggleFiltersCollapse()" data-toggle="collapse" data-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
+                            <i class="fa fa-angle-down" [ngClass]="{'rotated': !filtersCollapsed}" aria-hidden="true"></i>{{ 'general.filters' | translate }}<span>{{ 'general.filtersClick' | translate }}</span>
+                        </h2>
+                    </div>
+              
+                    <div id="collapseFiltros" class="collapse" aria-labelledby="cabeceraFiltros" data-parent="#accordionFiltros">
+                        <div class="card-body">
+
+                            <div class="container-fluid">
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.product' | translate }}</h3>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select [(ngModel)]="filtros.producto" name="producto" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1" selected>{{ 'tablas.product' | translate }}</option>
+                                                    <option *ngFor="let producto of arraysDatosService.productos" [ngValue]="producto.id">{{producto.nombre}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('cantidadDesde')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.cantidadDesde" name="cantidadDesde" type="text" placeholder="{{ 'general.quantityFrom' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('cantidadHasta')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.cantidadHasta" name="cantidadHasta" type="text" placeholder="{{ 'general.quantityTo' | translate }}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.provider' | translate }}</h3>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('proveedorNombre')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.proveedorNombre" name="proveedorNombre" type="text" placeholder="{{ 'general.providerName' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('proveedorApellidos')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.proveedorApellidos" name="proveedorApellidos" type="text" placeholder="{{ 'general.providerLastName' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('proveedorNombreUsuario')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.proveedorNombreUsuario" name="proveedorNombreUsuario" type="text" placeholder="{{ 'general.providerUserName' | translate }}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.volunteer' | translate }}</h3>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('voluntarioNombre')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.voluntarioNombre" name="voluntarioNombre" type="text" placeholder="{{ 'general.volunteerName' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('voluntarioApellidos')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.voluntarioApellidos" name="voluntarioApellidos" type="text" placeholder="{{ 'general.volunteerLastName' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('voluntarioNombreUsuario')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.voluntarioNombreUsuario" name="voluntarioNombreUsuario" type="text" placeholder="{{ 'general.volunteerUserName' | translate }}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.beneficiary' | translate }}</h3>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('beneficiarioNombre')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.beneficiarioNombre" name="beneficiarioNombre" type="text" placeholder="{{ 'general.beneficiaryName' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('beneficiarioApellidos')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.beneficiarioApellidos" name="beneficiarioApellidos" type="text" placeholder="{{ 'general.beneficiaryLastName' | translate }}" autocomplete="off">
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('beneficiarioNombreUsuario')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.beneficiarioNombreUsuario" name="beneficiarioNombreUsuario" type="text" placeholder="{{ 'general.beneficiaryUserName' | translate }}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.address' | translate }}</h3>
+                                        
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select class="form-control form-control-lg" [(ngModel)]="filtros.provinciaProveedor" (change)="setMuncipios(1,1)" name="provinciaProveedor" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.provinceDonation' | translate }}</option>
+                                                    <option *ngFor="let provincia of arraysDatosService.provincias" [ngValue]="provincia.id">{{ provincia.nombre | titlecase }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select *ngIf="filtros.provinciaProveedor == -1" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.townDonation' | translate }}</option>
+                                                </select>
+                                                <select *ngIf="filtros.provinciaProveedor != -1" class="form-control form-control-lg" [(ngModel)]="filtros.municipioProveedor" name="municipioProveedor" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.townDonation' | translate }}</option>
+                                                    <option *ngFor="let municipio of arraysDatosService.domMuncipios1Filtros" [ngValue]="municipio.id">{{ municipio.nombre | titlecase }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select class="form-control form-control-lg" [(ngModel)]="filtros.provinciaBeneficiario" (change)="setMuncipios(2,1)" name="provinciaBeneficiario" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.provinceDelivery' | translate }}</option>
+                                                    <option *ngFor="let provincia of arraysDatosService.provincias" [ngValue]="provincia.id">{{ provincia.nombre | titlecase }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select *ngIf="filtros.provinciaBeneficiario == -1" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.townDelivery' | translate }}</option>
+                                                </select>
+                                                <select *ngIf="filtros.provinciaBeneficiario != -1" class="form-control form-control-lg" [(ngModel)]="filtros.municipioBeneficiario" name="municipioBeneficiario" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.townDelivery' | translate }}</option>
+                                                    <option *ngFor="let municipio of arraysDatosService.domMuncipios2Filtros" [ngValue]="municipio.id">{{ municipio.nombre | titlecase }}</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.date' | translate }}</h3>
+
+                                        <div class="row">
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times fecha" (click)="resetInput('fechaDesde')" aria-hidden="true"></i>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="filtros.fechaDesde" name="fechaDesde" placeholder="{{ 'general.dateFrom' | translate }}" ngbDatepicker #a="ngbDatepicker" autocomplete="off">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text" (click)="a.toggle()">
+                                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times fecha" (click)="resetInput('fechaHasta')" aria-hidden="true"></i>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="filtros.fechaHasta" name="fechaHasta" placeholder="{{ 'general.dateTo' | translate }}" ngbDatepicker #b="ngbDatepicker" autocomplete="off">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text" (click)="b.toggle()">
+                                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="botones">
+                                <button type="button" (click)="resetFilters()" class="btn btn-outline-secondary btn-lg"><i class="fa fa-square-o" aria-hidden="true"></i> {{ 'general.cleanFilters' | translate }}</button>
+                                <button type="button" (click)="filtrar()" class="btn btn-primary btn-lg"><i class="fa fa-filter" aria-hidden="true"></i> {{ 'general.filter' | translate }}</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TABLA -->
+            <div class="preTable">
+                <div class="botones">
+                </div>
+                <div class="info">
+                    <strong>{{ arraysDatosService.donacionesFiltradas.length }} </strong><span *ngIf="arraysDatosService.donacionesFiltradas.length!== 1">{{ 'general.results' | translate }}</span><span *ngIf="arraysDatosService.donacionesFiltradas.length === 1">{{ 'general.result' | translate }}</span>
+                </div>
+            </div>
+
+            <app-spinner *ngIf="arraysDatosService.donacionesFiltradas.length <= 0 && !iniciado"></app-spinner>
+
+            <div class="table-responsive" *ngIf="arraysDatosService.donacionesFiltradas.length > 0">
+
+                <table class="table table-hover tablaDatosPpal" [mfData]="arraysDatosService.donacionesFiltradas" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="fecha" mfSortOrder="desc">
+                    <thead>
+                        <tr>
+                            <th class="noselect"><mfDefaultSorter by="producto">{{ 'tablas.product' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="cantidad">{{ 'tablas.quantity' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="proveedorNombreUsuario">{{ 'tablas.provider' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="voluntarioNombreUsuario">{{ 'tablas.volunteer' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="beneficiarioNombreUsuario">{{ 'tablas.beneficiary' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="provinciaProveedor">{{ 'tablas.provinceDonation' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="municipioProveedor">{{ 'tablas.townDonation' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="provinciaBeneficiario">{{ 'tablas.provinceDelivery' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="municipioBeneficiario">{{ 'tablas.townDelivery' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="rutaFoto">{{ 'tablas.picture' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect" style="min-width: 70px;"><mfDefaultSorter by="fecha">{{ 'tablas.date' | translate }}</mfDefaultSorter></th>
+                            <th class="acciones noselect">{{ 'tablas.actions' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of mf.data; let index = index">
+                            <td (click)="visualizar(item.id)">{{ getProductoNombre(item.producto) }}</td>
+                            <td (click)="visualizar(item.id)">{{ item.cantidad }} Kg</td>
+                            <td class="enlace" (click)="muestraProveedor(item.proveedorId)">{{ item.proveedorNombreUsuario }}</td>
+                            <td class="enlace" (click)="muestraVoluntario(item.voluntarioId)">{{ item.voluntarioNombreUsuario }}</td>
+                            <td class="enlace" (click)="muestraBeneficiario(item.beneficiarioId)">{{ item.beneficiarioNombreUsuario }}</td>
+                            <td (click)="visualizar(item.id)">{{ arraysDatosService.getProvinciaNombre(item.provinciaProveedor) | titlecase }}</td>
+                            <td (click)="visualizar(item.id)">{{ arraysDatosService.getMunicipioNombre(item.municipioProveedor) | titlecase }}</td>
+                            <td (click)="visualizar(item.id)">{{ arraysDatosService.getProvinciaNombre(item.provinciaBeneficiario) | titlecase }}</td>
+                            <td (click)="visualizar(item.id)">{{ arraysDatosService.getMunicipioNombre(item.municipioBeneficiario) | titlecase }}</td>
+                            <td class="enlace" (click)="muestraFoto(item.id)"><img [src]="parametrosService.baseUrlApi+item.rutaFoto" alt="{{ 'tablas.picture' | translate }}"></td>
+                            <td (click)="visualizar(item.id)">{{ item.fecha | date: 'dd-MM-yyyy' }}</td>
+                            <td>
+                                <button (click)="visualizar(item.id)"><i class="fa fa-eye" placement="top" openDelay="1000" ngbTooltip="{{ 'general.view' | translate }}" aria-hidden="true"></i></button>
+                                <!-- <button (click)="generalService.modalIdElemento=item.id;generalService.abreModal('borrarDonacion')"><i class="fa fa-trash" placement="top" openDelay="1000" ngbTooltip="{{ 'general.delete' | translate }}" aria-hidden="true"></i></button> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="12">
+                                <mfBootstrapPaginator></mfBootstrapPaginator>
+                                <!-- <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator> -->
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="noResults" *ngIf="arraysDatosService.donacionesFiltradas.length <= 0 && iniciado">
+                {{ 'general.noResults' | translate }}
+            </div>
+
+        </section><!-- Cierra <section class="tabla"> -->
+
+
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <!-- ZONA DE EDICIÓN O VISUALIZACIÓN -->
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <section *ngIf="visualizacion">
+
+            <h1 class="titulo">
+                <i (click)="volver()" class="fa fa-chevron-left" placement="top" openDelay="1000" ngbTooltip="{{ 'general.back' | translate }}" aria-hidden="true"></i>
+                <span *ngIf="visualizacion">{{ 'donaciones.viewDonations' | translate }}</span>
+            </h1>
+
+            <div class="container-fluid">
+
+                <form #formEdit="ngForm" class="formDonaciones" role="form">
+
+                    <div class="row">
+
+                        <!-- Columna formulario -->
+                        <div class="col-12 col-xl-8">
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="productDonation">{{ 'tablas.product' | translate }}</label>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <select id="productDonation" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoProduct.invalid}" #datoProduct="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditDonacion.producto" name="productDonation" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.product' | translate }}</option>
+                                            <option *ngFor="let producto of arraysDatosService.productos" [ngValue]="producto.id">{{producto.nombre}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="quantityDonation">{{ 'tablas.quantity' | translate }} (Kg)</label>
+                                        <input type="text" class="form-control form-control-lg" id="quantityDonation" [ngClass]="{'is-invalid': formularioEnviado && datoCantidad.invalid}" #datoCantidad="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.cantidad" name="quantityDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="providerNameDonation">{{ 'general.providerName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="providerNameyDonation" [ngClass]="{'is-invalid': formularioEnviado && datoProvNombre.invalid}" #datoProvNombre="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.proveedorNombre" name="providerNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="providerLastNameDonation">{{ 'general.providerLastName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="providerLastNameyDonation" [ngClass]="{'is-invalid': formularioEnviado && datoProvApellidos.invalid}" #datoProvApellidos="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.proveedorApellidos" name="providerLastNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="providerUserNameDonation">{{ 'general.providerUserName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="providerUserNameyDonation" [ngClass]="{'is-invalid': formularioEnviado && datoProvNombreUsuario.invalid}" #datoProvNombreUsuario="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.proveedorNombreUsuario" name="providerUserNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="volunteerNameDonation">{{ 'general.volunteerName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="volunteerNameDonation" [ngClass]="{'is-invalid': formularioEnviado && datoVolNombre.invalid}" #datoVolNombre="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.voluntarioNombre" name="volunteerNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="volunteerLastNameDonation">{{ 'general.volunteerLastName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="volunteerLastNameDonation" [ngClass]="{'is-invalid': formularioEnviado && datoVolApellidos.invalid}" #datoVolApellidos="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.voluntarioApellidos" name="volunteerLastNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="volunteerUserNameDonation">{{ 'general.volunteerUserName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="volunteerUserNameDonation" [ngClass]="{'is-invalid': formularioEnviado && datoVolNombreUsuario.invalid}" #datoVolNombreUsuario="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.voluntarioNombreUsuario" name="volunteerUserNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="beneficiaryNameDonation">{{ 'general.beneficiaryName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="beneficiaryNameDonation" [ngClass]="{'is-invalid': formularioEnviado && datoBenefNombre.invalid}" #datoBenefNombre="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.beneficiarioNombre" name="beneficiaryNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="beneficiaryLastNameDonation">{{ 'general.beneficiaryLastName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="beneficiaryLastNameDonation" [ngClass]="{'is-invalid': formularioEnviado && datoBenefApellidos.invalid}" #datoBenefApellidos="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.beneficiarioApellidos" name="beneficiaryLastNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="beneficiaryUserNameDonation">{{ 'general.beneficiaryUserName' | translate }}</label>
+                                        <input type="text" class="form-control form-control-lg" id="beneficiaryUserNameDonation" [ngClass]="{'is-invalid': formularioEnviado && datoBenefNombreUsuario.invalid}" #datoBenefNombreUsuario="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditDonacion.beneficiarioNombreUsuario" name="beneficiaryUserNameDonation" autocomplete="off">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="provinciasProv">{{ 'tablas.provinceDonation' | translate }} *</label>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <select id="provinciasProv" (change)="setMuncipios(1,2)" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoProvincia.invalid}" #datoProvincia="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditDonacion.provinciaProveedor" name="provinciasProv" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.province' | translate }}</option>
+                                            <option *ngFor="let provincia of arraysDatosService.provincias" [ngValue]="provincia.id">{{provincia.nombre | titlecase }}</option>
+                                        </select>
+                                        <div *ngIf="formularioEnviado && datoProvincia.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="municipioProv">{{ 'tablas.townDonation' | translate }} *</label>
+                                        <!-- Este select vacío se muestra cuando aún no se ha seleccionado una provincia, para que no se quede el hueco vacío-->
+                                        <select *ngIf="arraysDatosService.datosEditDonacion.provinciaProveedor == -1" class="form-control form-control-lg" required [disabled]="visualizacion" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                        </select>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <span *ngIf="arraysDatosService.datosEditDonacion.provinciaProveedor != -1">
+                                            <select id="municipioProv" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoMunicipio.invalid}" #datoMunicipio="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditDonacion.municipioProveedor" name="municipioProv" autocomplete="off">
+                                                <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                                <option *ngFor="let municipio of arraysDatosService.donMuncipios1Edit" [ngValue]="municipio.id">{{municipio.nombre | titlecase}}</option>
+                                            </select>
+                                            <div *ngIf="formularioEnviado && datoMunicipio.invalid" class="invalid-feedback">
+                                                {{ 'errores.errorFieldRequired' | translate }}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="provinciasBen">{{ 'tablas.provinceDelivery' | translate }} *</label>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <select id="provinciasBen" (change)="setMuncipios(2,2)" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoProvincia2.invalid}" #datoProvincia2="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditDonacion.provinciaBeneficiario" name="provinciasBen" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.province' | translate }}</option>
+                                            <option *ngFor="let provincia of arraysDatosService.provincias" [ngValue]="provincia.id">{{provincia.nombre | titlecase }}</option>
+                                        </select>
+                                        <div *ngIf="formularioEnviado && datoProvincia2.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="municipioBen">{{ 'tablas.townDelivery' | translate }} *</label>
+                                        <!-- Este select vacío se muestra cuando aún no se ha seleccionado una provincia, para que no se quede el hueco vacío-->
+                                        <select *ngIf="arraysDatosService.datosEditDonacion.provinciaBeneficiario == -1" class="form-control form-control-lg" required [disabled]="visualizacion" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                        </select>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <span *ngIf="arraysDatosService.datosEditDonacion.provinciaBeneficiario != -1">
+                                            <select id="municipioBen" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoMunicipio2.invalid}" #datoMunicipio2="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditDonacion.municipioBeneficiario" name="municipioBen" autocomplete="off">
+                                                <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                                <option *ngFor="let municipio of arraysDatosService.donMuncipios2Edit" [ngValue]="municipio.id">{{municipio.nombre | titlecase}}</option>
+                                            </select>
+                                            <div *ngIf="formularioEnviado && datoMunicipio2.invalid" class="invalid-feedback">
+                                                {{ 'errores.errorFieldRequired' | translate }}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="fnacimBenef">{{ 'tablas.date' | translate }} *</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-lg" id="fechaDonacion" [ngClass]="{'is-invalid': formularioEnviado && datoFecha.invalid}" #datoFecha="ngModel" required readonly [disabled]="visualizacion" [(ngModel)]="fechaEditCalendar" name="fechaDonacion" ngbDatepicker #d="ngbDatepicker" autocomplete="off">
+                                            <div class="input-group-append" *ngIf="false">
+                                                <span class="input-group-text" (click)="d.toggle()">
+                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- columna foto -->
+                        <div class="col-12 col-xl-4">
+
+                            <img (click)="muestraFoto(arraysDatosService.datosEditDonacion.id)" [src]="parametrosService.baseUrlApi+arraysDatosService.datosEditDonacion.rutaFoto" alt="{{ 'tablas.picture' | translate }}">
+
+                        </div>
+
+                        
+                    </div><!-- Cierra <div class="row"> -->
+
+
+                    <div class="zonaBotones">
+                        <button (click)="volver()" class="btn btn-primary btn-lg"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{ 'general.back' | translate }}</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </section><!-- <section class="cuerpo"> -->
+
+</main>

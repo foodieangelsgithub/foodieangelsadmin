@@ -1,0 +1,4 @@
+<div id="visor" (click)="cerrar()" [ngClass]="{'visible': generalService.visorVisible}">
+    <i class="fa fa-times" (click)="cerrar()" aria-hidden="true"></i>
+    <img [src]="generalService.visorImagen" [style.width]="generalService.visorAnchoImagen+'px'" [style.height]="generalService.visorAltoImagen+'px'" alt="">
+</div>

@@ -1,0 +1,18 @@
+<nav class="menuPpal" [ngClass]="{'show': generalService.menuVisible}">
+  <i class="fa fa-times toggleMenu" (click)="generalService.hideMenu()" aria-hidden="true"></i>
+  <img src="assets/imagenes/logo.png" alt="Haya">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col">
+        <ul>
+          <li (click)="seleccionar('administradores')" [ngClass]="{'selected': generalService.menuSelected == 'administradores' }" [routerLink]="['/administradores']">{{ 'general.administrators' | translate }}</li>
+          <li (click)="seleccionar('proveedores')" [ngClass]="{'selected': generalService.menuSelected == 'proveedores' }" [routerLink]="['/proveedores']">{{ 'general.suppliers' | translate }}</li>
+          <li (click)="seleccionar('voluntarios')" [ngClass]="{'selected': generalService.menuSelected == 'voluntarios' }" [routerLink]="['/voluntarios']">{{ 'general.volunteers' | translate }}</li>
+          <li (click)="seleccionar('beneficiarios')" [ngClass]="{'selected': generalService.menuSelected == 'beneficiarios' }" [routerLink]="['/beneficiarios']">{{ 'general.beneficiaries' | translate }}</li>
+          <li (click)="seleccionar('donaciones')" [ngClass]="{'selected': generalService.menuSelected == 'donaciones' }" [routerLink]="['/donaciones']">{{ 'general.donationsCompleted' | translate }}</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</nav>

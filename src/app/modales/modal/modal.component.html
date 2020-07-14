@@ -1,0 +1,24 @@
+<!-- MODAL BOOTSTRAP -->
+
+<div class="modal fade" id="modalFoodieAngels" tabindex="-1" role="dialog" aria-labelledby="cabeceraModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" [ngClass]="{'modal-lg': generalService.modalLargeSize}" role="document">
+        <div class="modal-content">
+
+            <!-- Modal de borrar administrador -->
+            <app-modal-borrar-administrador *ngIf="generalService.modalSelected == 'borrarAdministrador'"></app-modal-borrar-administrador>
+            <!-- Modal de borrar proveedor -->
+            <app-modal-borrar-proveedor *ngIf="generalService.modalSelected == 'borrarProveedor'"></app-modal-borrar-proveedor>
+            <!-- Modal de borrar voluntario -->
+            <app-modal-borrar-voluntario *ngIf="generalService.modalSelected == 'borrarVoluntario'"></app-modal-borrar-voluntario>
+            <!-- Modal de borrar beneficiario -->
+            <app-modal-borrar-beneficiario *ngIf="generalService.modalSelected == 'borrarBeneficiario'"></app-modal-borrar-beneficiario>
+            <!-- Modal de borrar donación -->
+            <app-modal-borrar-donacion *ngIf="generalService.modalSelected == 'borrarDonacion'"></app-modal-borrar-donacion>
+            <!-- Modal de editar horario -->
+            <app-modal-editar-horario *ngIf="generalService.modalSelected == 'editarHorario'"></app-modal-editar-horario>
+
+        </div><!-- Cierra <div class="modal-content"> -->
+    </div><!-- Cierra <div class="modal-dialog" role="document">  -->
+</div><!--  Cierra modal-->
+
+<!-- FIN DEL MODAL BOOTSTRAP -->

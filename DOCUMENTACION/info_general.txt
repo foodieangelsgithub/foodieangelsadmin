@@ -1,0 +1,15 @@
+angular 9 datatable para paginación y ordenación automática de tablas
+--------------------------------------------------------------------
+
+https://www.npmjs.com/package/angular-9-datatable
+
+
+angular material time picker
+----------------------------
+https://www.npmjs.com/package/ngx-material-timepicker
+
+
+autoprefixer para meter correctamente los prefijos en estilos flex
+-------------------------------------------------------------------
+
+https://autoprefixer.github.io/

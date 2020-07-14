@@ -1,0 +1,480 @@
+
+<app-notificacion></app-notificacion>
+
+<app-modal *ngIf="generalService.showingModals"></app-modal>
+
+<app-header [hidden]="!generalService.logueado"></app-header>
+
+<main [hidden]="!generalService.logueado">
+
+    <app-menu></app-menu>
+
+    <section class="cuerpo" [ngClass]="{'menu': generalService.menuVisible}">
+
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <!-- ZONA DE TABLA -->
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
+        <section class="zonaTabla" [ngClass]="{'oculto': edicion || visualizacion}">
+
+            <h1 class="titulo">{{ 'general.suppliers' | translate }}</h1>
+
+            <!-- FILTROS -->
+            <div class="accordion" id="accordionFiltros">
+                
+                <div class="card">
+                    <div class="card-header" id="cabeceraFiltros">
+                        <h2 class="mb-0 noselect" (click)="toggleFiltersCollapse()" data-toggle="collapse" data-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
+                            <i class="fa fa-angle-down" [ngClass]="{'rotated': !filtersCollapsed}" aria-hidden="true"></i>{{ 'general.filters' | translate }}<span>{{ 'general.filtersClick' | translate }}</span>
+                        </h2>
+                    </div>
+              
+                    <div id="collapseFiltros" class="collapse" aria-labelledby="cabeceraFiltros" data-parent="#accordionFiltros">
+                        <div class="card-body">
+
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.provider' | translate }}</h3>
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('nombre')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.nombre" name="nombre" type="text" placeholder="{{ 'tablas.name' | translate }}" autocomplete="off">
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('apellidos')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.apellidos" name="apellidos" type="text" placeholder="{{ 'tablas.lastName' | translate }}" autocomplete="off">
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('nombreUsuario')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.nombreUsuario" name="nombreUsuario" type="text" placeholder="{{ 'tablas.userName' | translate }}" autocomplete="off">
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('telefono')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.telefono" name="telefono" type="text" placeholder="{{ 'tablas.tel' | translate }}" autocomplete="off">
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('email')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.email" name="email" type="text" placeholder="{{ 'tablas.email' | translate }}" autocomplete="off">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.address' | translate }}</h3>
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('direccion')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.direccion" name="direccion" type="text" placeholder="{{ 'tablas.address' | translate }}" autocomplete="off">
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select class="form-control form-control-lg" [(ngModel)]="filtros.provincia" (change)="setMuncipios(1)" name="provincia" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.province' | translate }}</option>
+                                                    <option *ngFor="let provincia of arraysDatosService.provincias" [ngValue]="provincia.id">{{ provincia.nombre | titlecase }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <select *ngIf="filtros.provincia == -1" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                                </select>
+                                                <select *ngIf="filtros.provincia != -1" class="form-control form-control-lg" [(ngModel)]="filtros.municipio" name="municipio" autocomplete="off">
+                                                    <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                                    <option *ngFor="let municipio of arraysDatosService.provMuncipiosFiltros" [ngValue]="municipio.id">{{ municipio.nombre | titlecase }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times" (click)="resetInput('codPostal')" aria-hidden="true"></i>
+                                                <input class="form-control form-control-lg" [(ngModel)]="filtros.codPostal" name="codPostal" type="text" placeholder="{{ 'tablas.postalCode' | translate }}" autocomplete="off">
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.date' | translate }}</h3>
+                                        <div class="row">
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times fecha" (click)="resetInput('fechaDesde')" aria-hidden="true"></i>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="filtros.fechaDesde" name="fechaDesde" placeholder="{{ 'general.dateFrom' | translate }}" ngbDatepicker #a="ngbDatepicker" autocomplete="off">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text" (click)="a.toggle()">
+                                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-md-4 elemento">
+                                                <i class="fa fa-times fecha" (click)="resetInput('fechaHasta')" aria-hidden="true"></i>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="filtros.fechaHasta" name="fechaHasta" placeholder="{{ 'general.dateTo' | translate }}" ngbDatepicker #b="ngbDatepicker" autocomplete="off">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text" (click)="b.toggle()">
+                                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <h3>{{ 'filtros.additional' | translate }}</h3>
+                                        <div class="row">
+
+                                            <div class="col-12 col-md">
+                                                <select [(ngModel)]="filtros.redesSociales" name="redesSociales" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1" selected>{{ 'tablas.social' | translate }}</option>
+                                                    <option value="true">{{ 'general.yes' | translate }}</option>
+                                                    <option value="false">{{ 'general.no' | translate }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md">
+                                                <select [(ngModel)]="filtros.lopd" name="lopd" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1" selected>{{ 'tablas.lopd' | translate }}</option>
+                                                    <option value="true">{{ 'general.yes' | translate }}</option>
+                                                    <option value="false">{{ 'general.no' | translate }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-12 col-md">
+                                                <select [(ngModel)]="filtros.active" name="active" class="form-control form-control-lg" autocomplete="off">
+                                                    <option value="-1" selected>{{ 'tablas.active' | translate }}</option>
+                                                    <option value="1">{{ 'general.yes' | translate }}</option>
+                                                    <option value="0">{{ 'general.no' | translate }}</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="botones">
+                                <button type="button" (click)="resetFilters()" class="btn btn-outline-secondary btn-lg"><i class="fa fa-square-o" aria-hidden="true"></i> {{ 'general.cleanFilters' | translate }}</button>
+                                <button type="button" (click)="filtrar()" class="btn btn-primary btn-lg"><i class="fa fa-filter" aria-hidden="true"></i> {{ 'general.filter' | translate }}</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TABLA -->
+
+            <div class="preTable">
+                <div class="botones">
+                    <button (click)="crear()" class="btn btn-primary btn-lg"><i class="fa fa-plus" aria-hidden="true"></i> {{ 'proveedores.addSupplier' | translate }} </button>
+                </div>
+                <div class="info">
+                    <strong>{{ arraysDatosService.proveedoresFiltrados.length }} </strong><span *ngIf="arraysDatosService.proveedoresFiltrados.length!== 1">{{ 'general.results' | translate }}</span><span *ngIf="arraysDatosService.proveedoresFiltrados.length === 1">{{ 'general.result' | translate }}</span>
+                </div>
+            </div>
+
+            <app-spinner *ngIf="arraysDatosService.proveedoresFiltrados.length <= 0 && !iniciado"></app-spinner>
+
+            <div class="table-responsive" *ngIf="arraysDatosService.proveedoresFiltrados.length > 0">
+
+                <table class="table table-hover tablaDatosPpal" [mfData]="arraysDatosService.proveedoresFiltrados" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="fecha" mfSortOrder="desc">
+                    <thead>
+                        <tr>
+                            <th class="noselect"><mfDefaultSorter by="nombre">{{ 'tablas.name' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="apellidos">{{ 'tablas.lastName' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="nombreUsuario">{{ 'tablas.userName' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="direccion">{{ 'tablas.address' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="provincia">{{ 'tablas.province' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="municipio">{{ 'tablas.town' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="telefono">{{ 'tablas.tel' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="email">{{ 'tablas.email' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="codPostal">{{ 'tablas.postalCode' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="redesSociales">{{ 'tablas.social' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="lopd">{{ 'tablas.lopd' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect" style="min-width: 70px;"><mfDefaultSorter by="fecha">{{ 'tablas.date' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect" style="width: 100px;"><mfDefaultSorter by="active">{{ 'tablas.active' | translate }}</mfDefaultSorter></th>
+                            <th class="acciones noselect">{{ 'tablas.actions' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of mf.data; let index = index">
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.nombre }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.apellidos }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.nombreUsuario }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)" class="alignLeft">{{ item.direccion }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ arraysDatosService.getProvinciaNombre(item.provincia) | titlecase }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ arraysDatosService.getMunicipioNombre(item.municipio) | titlecase }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.telefono }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.email }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.codPostal }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">
+                                <i *ngIf="item.redesSociales" class="fa fa-check" aria-hidden="true"></i>
+                                <i *ngIf="!item.redesSociales" class="fa fa-times" aria-hidden="true"></i>
+                            </td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">
+                                <i *ngIf="item.lopd" class="fa fa-check" aria-hidden="true"></i>
+                                <i *ngIf="!item.lopd" class="fa fa-times" aria-hidden="true"></i>
+                            </td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.fecha | date: 'dd-MM-yyyy' }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" class="activar">
+                                <i [ngClass]="{ 'hidden': !editando[item.id] }" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                                <material-slide-toggle [ngClass]="{ 'hidden': editando[item.id] }" [checked]="item.active === 1" (change)="onChangeActivate($event,item.id)"></material-slide-toggle>
+                            </td>
+                            <td [ngClass]="{'inactive': item.active === 0}">
+                                <button (click)="editarVisualizar(item.id,1)"><i class="fa fa-pencil" placement="top" openDelay="1000" ngbTooltip="{{ 'general.edit' | translate }}" aria-hidden="true"></i></button>
+                                <button (click)="editarVisualizar(item.id,2)"><i class="fa fa-eye" placement="top" openDelay="1000" ngbTooltip="{{ 'general.view' | translate }}" aria-hidden="true"></i></button>
+                                <!-- <button (click)="generalService.modalIdElemento=item.id;generalService.abreModal('borrarProveedor')"><i class="fa fa-trash" placement="top" openDelay="1000" ngbTooltip="{{ 'general.delete' | translate }}" aria-hidden="true"></i></button> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="14">
+                                <mfBootstrapPaginator></mfBootstrapPaginator>
+                                <!-- <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator> -->
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="noResults" *ngIf="arraysDatosService.proveedoresFiltrados.length <= 0 && iniciado">
+                {{ 'general.noResults' | translate }}
+            </div>
+
+        </section><!-- Cierra <section class="tabla"> -->
+
+
+
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <!-- ZONA DE EDICIÓN O VISUALIZACIÓN -->
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
+        <section *ngIf="edicion || visualizacion">
+
+            <h1 class="titulo">
+                <i (click)="volver()" class="fa fa-chevron-left" placement="top" openDelay="1000" ngbTooltip="{{ 'general.back' | translate }}" aria-hidden="true"></i>
+                <span *ngIf="edicion">{{ 'proveedores.editSupplier' | translate }}</span>
+                <span *ngIf="edicion" class="info">({{ 'general.asteriskRequired' | translate }}). </span>
+                <span *ngIf="visualizacion">{{ 'proveedores.viewSupplier' | translate }}</span>
+            </h1>
+
+            <div class="container-fluid">
+
+                <form (ngSubmit)="guardar(formEdit)" #formEdit="ngForm" (keypress)="onKeyup($event,formEdit)" role="form">
+
+                    <!-- EDICIÓN DATOS -->
+
+                    <div class="row">
+
+                        <!-- Columna formulario -->
+                        <div class="col-12 col-xl-8">
+
+                            <div class="row formProov">
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="nombreProv">{{ 'tablas.name' | translate }} *</label>
+                                        <input class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoNombre.invalid}" #datoNombre="ngModel" type="text" id="nombreProv" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.nombre" name="nombre" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datoNombre.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="apellidosProv">{{ 'tablas.lastName' | translate }} *</label>
+                                        <input type="text" class="form-control form-control-lg" id="apellidosProv" [ngClass]="{'is-invalid': formularioEnviado && datoApellidos.invalid}" #datoApellidos="ngModel" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.apellidos" name="apellidos" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datoApellidos.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="direccionProv">{{ 'tablas.address' | translate }} *</label>
+                                        <input type="text" class="form-control form-control-lg" id="direccionProv" [ngClass]="{'is-invalid': formularioEnviado && datoDireccion.invalid}" #datoDireccion="ngModel" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.direccion" name="direccion" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datoDireccion.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="provinciasProv">{{ 'tablas.province' | translate }} *</label>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <select id="provinciasProv" (change)="setMuncipios(2)" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoProvincia.invalid}" #datoProvincia="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditProveedor.provincia" name="provincia" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.province' | translate }}</option>
+                                            <option *ngFor="let provincia of arraysDatosService.provincias" [ngValue]="provincia.id">{{provincia.nombre | titlecase }}</option>
+                                        </select>
+                                        <div *ngIf="formularioEnviado && datoProvincia.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="municipioProv">{{ 'tablas.town' | translate }} *</label>
+                                        <!-- Este select vacío se muestra cuando aún no se ha seleccionado una provincia, para que no se quede el hueco vacío-->
+                                        <select *ngIf="arraysDatosService.datosEditProveedor.provincia == -1" class="form-control form-control-lg" required [disabled]="visualizacion" autocomplete="off">
+                                            <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                        </select>
+                                        <!-- El select además del required contiene un pattern que exige que el valor sea mayor que 0 pattern="^[1-9]\d*$" -->
+                                        <span *ngIf="arraysDatosService.datosEditProveedor.provincia != -1">
+                                            <select id="municipioProv" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoMunicipio.invalid}" #datoMunicipio="ngModel" required [disabled]="visualizacion" pattern="^[1-9]\d*$" [(ngModel)]="arraysDatosService.datosEditProveedor.municipio" name="municipio" autocomplete="off">
+                                                <option value="-1">{{ 'tablas.town' | translate }}</option>
+                                                <option *ngFor="let municipio of arraysDatosService.provMuncipiosEdit" [ngValue]="municipio.id">{{municipio.nombre | titlecase}}</option>
+                                            </select>
+                                            <div *ngIf="formularioEnviado && datoMunicipio.invalid" class="invalid-feedback">
+                                                {{ 'errores.errorFieldRequired' | translate }}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="telProv">{{ 'tablas.tel' | translate }} *</label>
+                                        <input type="text" class="form-control form-control-lg" id="telProv" [ngClass]="{'is-invalid': formularioEnviado && datotelefono.invalid}" #datotelefono="ngModel" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.telefono" name="telefono" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datotelefono.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="emailProv">{{ 'tablas.email' | translate }}</label>
+                                        <input type="email" class="form-control form-control-lg" id="emailProv" [ngClass]="{'is-invalid': formularioEnviado && datoemail.invalid}" #datoemail="ngModel" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.email" name="email" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datoemail.invalid" class="invalid-feedback">
+                                            <div *ngIf="datoemail.errors.pattern">
+                                                {{ 'errores.errorValidMail' | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="codPostalProv">{{ 'tablas.postalCode' | translate }} *</label>
+                                        <input type="text" class="form-control form-control-lg" id="codPostalProv" [ngClass]="{'is-invalid': formularioEnviado && datoCodPostal.invalid}" #datoCodPostal="ngModel" required maxlength="5" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.codPostal" name="codPostal" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datoCodPostal.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="redesProv">{{ 'tablas.social' | translate }} *</label>
+                                    <!-- El select además del required contiene un pattern que exige que el valor sea distinto de null pattern="^((?!null).)*$" -->
+                                    <select id="redesProv" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoRedes.invalid}" #datoRedes="ngModel" pattern="^((?!null).)*$" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.redesSociales" name="redesSociales" autocomplete="off">
+                                        <option value="null">{{ 'tablas.social' | translate }}</option>
+                                        <option value="true">{{ 'general.yes' | translate }}</option>
+                                        <option value="false">{{ 'general.no' | translate }}</option>
+                                    </select>
+                                    <div *ngIf="formularioEnviado && datoRedes.invalid" class="invalid-feedback">
+                                        {{ 'errores.errorFieldRequired' | translate }}
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="lopdProv">{{ 'tablas.lopd' | translate }} *</label>
+                                    <!-- El select además del required contiene un pattern que exige que el valor sea distinto de null pattern="^((?!null).)*$" -->
+                                    <select id="lopdProv" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoLopd.invalid}" #datoLopd="ngModel" pattern="^((?!null).)*$" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.lopd" name="lopd" autocomplete="off">
+                                        <option value="null">{{ 'tablas.lopd' | translate }}</option>
+                                        <option value="true">{{ 'general.yes' | translate }}</option>
+                                        <option value="false">{{ 'general.no' | translate }}</option>
+                                    </select>
+                                    <div *ngIf="formularioEnviado && datoLopd.invalid" class="invalid-feedback">
+                                        {{ 'errores.errorFieldRequired' | translate }}
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="nomusuProv">{{ 'general.userName' | translate }} *</label>
+                                        <input type="text" class="form-control form-control-lg" id="nomusuProv" [ngClass]="{'is-invalid': formularioEnviado && datonomUsu.invalid}" #datonomUsu="ngModel" required maxlength="60" [disabled]="visualizacion || arraysDatosService.datosEditProveedor.id != null" [(ngModel)]="arraysDatosService.datosEditProveedor.nombreUsuario" name="nombreUsuario" autocomplete="off">
+                                        <div *ngIf="formularioEnviado && datonomUsu.invalid" class="invalid-feedback">
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="contraseniaProv">{{ 'general.password' | translate }} *</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control form-control-lg" id="contraseniaProv" [ngClass]="{'is-invalid': formularioEnviado && datoContrasenia.invalid}" #datoContrasenia="ngModel" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.contrasenia" name="contrasenia" autocomplete="off">
+                                        <div class="input-group-append" *ngIf="false">
+                                            <span class="input-group-text" id="pass01" (click)="generalService.showHidePass('pass01')">
+                                                <i class="fa fa-eye-slash verpassword" placement="top" openDelay="1000" ngbTooltip="{{ 'general.showPassword' | translate }}" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                        <div *ngIf="formularioEnviado && datoContrasenia.invalid" class="invalid-feedback">
+                                            <br>
+                                            {{ 'errores.errorFieldRequired' | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6">
+                                    <label for="activeProv">{{ 'tablas.active' | translate }} *</label>
+                                    <!-- El select además del required contiene un pattern que exige que el valor sea distinto de null pattern="^((?!null).)*$" -->
+                                    <select id="activeProv" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoActive.invalid}" #datoActive="ngModel" pattern="^((?!null).)*$" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditProveedor.active" name="active" autocomplete="off">
+                                        <option value="1">{{ 'general.yes' | translate }}</option>
+                                        <option value="0">{{ 'general.no' | translate }}</option>
+                                    </select>
+                                    <div *ngIf="formularioEnviado && datoActive.invalid" class="invalid-feedback">
+                                        {{ 'errores.errorFieldRequired' | translate }}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- columna horario -->
+                        <div class="col-12 col-xl-4">
+
+                            <app-horario-show *ngIf="generalService.horarioShowing" [zona]="'proveedores'" [visualizacion]="visualizacion"></app-horario-show>
+
+                        </div>
+
+                        
+                    </div><!-- Cierra <div class="row"> -->
+
+                    <div class="zonaBotones">
+                        <button (click)="volver()" class="btn btn-primary btn-lg"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{ 'general.back' | translate }}</button>
+                        <button type="submit" *ngIf="edicion" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ 'general.save' | translate }}</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </section><!-- <section class="cuerpo"> -->
+
+</main>

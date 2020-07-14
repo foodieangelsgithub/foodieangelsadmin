@@ -1,0 +1,11 @@
+            "styles": [
+              "src/assets/css/font-awesome.min.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/css/styles.less",
+              "src/assets/css/responsive.less"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/libs/popper1_16_0/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]

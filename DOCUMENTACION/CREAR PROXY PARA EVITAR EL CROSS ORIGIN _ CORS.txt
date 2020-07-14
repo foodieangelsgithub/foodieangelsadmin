@@ -1,0 +1,107 @@
+Los navegadores bloquean las llamadas a una api cuando la llamada va desde un origen a otro distinto
+
+Para evitar esto se hace la llamada desde la misma ruta del front y con un proxy posteriormente se redirige a la ruta del servidor. De este modo se resuleve el problema
+
+--------
+|PASO 1|
+-------
+
+Cambiar la ruta del servidor en nuestra aplicación
+
+parametros.service.ts
+---------------------
+
+en la propiedad baseUrlApi tenemos guardada la ruta a la url de nuestra api. originalmente era esta:
+
+	baseUrlApi:string = "http://api.foodieangels-prewebs7.hps.es/";
+
+ahora se cambia a esto. Se elimina la ruta absoluta y se deja una ruta relativa de la que colgarán las rutas de la api del servidor. Puede ser cualquir cosa pero hemos puesto 'api':
+
+	baseUrlApi:string = "/api/";
+
+Cuando queremos llamar a una ruta dentro de la api, como por ejemplo beneficiario, lo hacemos así:
+
+	this.parametrosService.baseUrlApi+'beneficiario/'   -> se evalua como /api/beneficiario/
+
+--------
+|PASO 2|
+--------
+
+Se crea el proxy para redirigir /api/ a la ruta del servidor
+
+dentro de src creamos el archivo proxy.conf.json , es el proxy y contiene:
+
+{
+  "/api/*": {
+  "target": "http://api.foodieangels-prewebs7.hps.es/",
+  "secure": false,
+  "changeOrigin": true,
+  "logLevel": "debug",
+  "pathRewrite": {"^/api" : ""}
+  }
+}
+
+Todo lo que venga con /api/ -> se traducirá al target, en este caso  http://api.foodieangels-prewebs7.hps.es/ que es la ruta del servido
+
+así si solicitamos /api/beneficiario/ se convertiría en  http://api.foodieangels-prewebs7.hps.es/beneficiario/
+
+
+--------
+|PASO 3|
+--------
+
+Indicar al sistema que debe usar el proxy
+
+Hay 2 opciones.
+
+La primera creo que es la mejor:
+
+angular.json
+------------
+
+dentro de angular.json aparece
+
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "foodieAngels:build"
+
+añadimos una línea para que quede así:
+
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "foodieAngels:build",
+            "proxyConfig": "src/proxy.conf.json"
+
+una vez hecho esto nuestro sistema funciona directamente con ng serve
+
+
+La segunda opción sería:
+
+package.json
+-------------
+
+La Línea 
+
+	"scripts": {
+
+		"start": "ng serve",
+
+cambia a
+
+	"scripts": {
+
+		"start": "ng serve --proxy-config src/proxy.conf.json",
+
+una vez hecho esto nuestro sistema funciona con npm start
+
+
+
+
+
+
+
+
+
+

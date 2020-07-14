@@ -1,0 +1,5 @@
+<header [ngClass]="{'menu': generalService.menuVisible}">
+    <i class="fa fa-bars toggleMenu" *ngIf="!generalService.menuVisible" (click)="generalService.showMenu()" aria-hidden="true"></i>
+    <i class="fa fa-times toggleMenu" *ngIf="generalService.menuVisible" (click)="generalService.hideMenu()" aria-hidden="true"></i>
+    <i class="fa fa-power-off logout" (click)="logout()" aria-hidden="true"></i>
+</header>

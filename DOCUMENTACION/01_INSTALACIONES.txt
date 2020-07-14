@@ -1,0 +1,40 @@
+﻿
+Para que funcionen las traducciones
+"@angular/localize": "^10.0.1",
+------------------------------------
+ng add @angular/localize 
+
+
+"bootstrap": "^4.5.0",
+"jquery": "^3.5.1",
+-------------------
+npm install bootstrap jquery --save
+npm install bootstrap@4.5.0 jquery@3.5.1 --save
+
+
+@ng-bootstrap/ng-bootstrap": "^6.1.0",
+---------------------------------------
+npm install --save @ng-bootstrap/ng-bootstrap
+npm install --save @ng-bootstrap/ng-bootstrap@6.1.0
+
+
+"@ngx-translate/core": "^13.0.0",
+"@ngx-translate/http-loader": "^6.0.0",
+---------------------------------------
+npm install @ngx-translate/core --save
+npm install @ngx-translate/core@13.0.0 --save
+
+npm install @ngx-translate/http-loader --save
+npm install @ngx-translate/http-loader@6.0.0 --save
+
+
+"angular-9-datatable": "^0.1.1",
+------------------------------------
+npm install angular-9-datatable --save
+npm install angular-9-datatable@0.1.1 --save
+
+
+"ngx-slide-toggle": "^0.1.1",
+-----------------------------------
+npm install ngx-slide-toggle --save
+npm install ngx-slide-toggle@0.1.1 --save

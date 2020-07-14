@@ -1,0 +1,55 @@
+<div class="container-fluid horarioEdit">
+
+    <div *ngFor="let item of generalService.horarioEdit; let index1 = index" class="row no-gutters elemento">
+        <div class="col-12 col-lg-4 dia">
+            <div class="row no-gutters">
+                <div class="col-4">
+                    <span *ngIf="item.dia === 1">{{ 'general.weekDays.monday' | translate }}</span>
+                    <span *ngIf="item.dia === 2">{{ 'general.weekDays.tuesday' | translate }}</span>
+                    <span *ngIf="item.dia === 3">{{ 'general.weekDays.wednesday' | translate }}</span>
+                    <span *ngIf="item.dia === 4">{{ 'general.weekDays.thursday' | translate }}</span>
+                    <span *ngIf="item.dia === 5">{{ 'general.weekDays.friday' | translate }}</span>
+                    <span *ngIf="item.dia === 6">{{ 'general.weekDays.saturday' | translate }}</span>
+                    <span *ngIf="item.dia === 7">{{ 'general.weekDays.sunday' | translate }}</span>
+                </div>
+                <div class="col-8 estado">
+                    <material-slide-toggle [checked]="item.abierto" (change)="onChange($event,index1)" ></material-slide-toggle>
+                    <span *ngIf="item.abierto">{{ 'general.opened' | translate }}</span>
+                    <span *ngIf="!item.abierto">{{ 'general.closed' | translate }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5 horario">
+            <form>
+            <ng-container *ngIf="item.abierto">
+                <div *ngFor="let horario of item.rangoHoras; let index2 = index" class="row no-gutters">
+                    <div class="col-5">
+                        <div class="form-group">
+                            <input type="email" class="form-control" (keyup)="changeSchedule($event,'abre',index1,index2)" [value]="horario.abre" placeholder="{{ 'general.opensAt' | translate }}">
+                        </div>
+                    </div>
+                    <div class="col-1 centrar">
+                        -
+                    </div>
+                    <div class="col-5">
+                        <div class="form-group">
+                            <input type="email" class="form-control" (keyup)="changeSchedule($event,'cierra',index1,index2)" [value]="horario.cierra" placeholder="{{ 'general.closeAt' | translate }}">
+                        </div>
+                    </div>
+                    <div class="col-1 borrar centrar">
+                        <i (click)="deleteSchedule(index1,index2)" class="fa fa-times" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </ng-container>
+            </form>
+        </div>
+
+        <div class="col-12 col-lg-3 accion">
+            <span *ngIf="item.abierto" (click)="addSchedule(index1)" class="noselect">Añadir horario</span>
+        </div>
+    </div>
+
+
+
+</div>

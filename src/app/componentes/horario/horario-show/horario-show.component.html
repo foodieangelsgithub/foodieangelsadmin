@@ -1,0 +1,33 @@
+<section class="horarioShow">
+    <h1>
+        {{ 'horario.schedule' | translate }}
+        <i *ngIf="!visualizacion && zona=='proveedores'" (click)="generalService.modalLargeSize=true;generalService.modalParameters.zona='proveedores';generalService.abreModal('editarHorario')" class="fa fa-pencil" placement="top" openDelay="1000" ngbTooltip="{{ 'general.edit' | translate }}" aria-hidden="true"></i>
+    </h1>
+
+    <div class="container-fluid">
+
+        <div *ngFor="let item of generalService.horarioShow" class="row no-gutters elemento">
+            <div class="col-4 dia">
+                <span *ngIf="item.dia === 1">{{ 'general.weekDays.monday' | translate }}</span>
+                <span *ngIf="item.dia === 2">{{ 'general.weekDays.tuesday' | translate }}</span>
+                <span *ngIf="item.dia === 3">{{ 'general.weekDays.wednesday' | translate }}</span>
+                <span *ngIf="item.dia === 4">{{ 'general.weekDays.thursday' | translate }}</span>
+                <span *ngIf="item.dia === 5">{{ 'general.weekDays.friday' | translate }}</span>
+                <span *ngIf="item.dia === 6">{{ 'general.weekDays.saturday' | translate }}</span>
+                <span *ngIf="item.dia === 7">{{ 'general.weekDays.sunday' | translate }}</span>
+            </div>
+            <div class="col-8 horas">
+                <ng-container *ngIf="item.rangoHoras.length > 0 && item.abierto">
+                    <div *ngFor="let horario of item.rangoHoras">
+                        {{ horario.abre }} - {{ horario.cierra }}
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="item.rangoHoras.length <= 0 || !item.abierto">
+                    <span class="cerrado">Cerrado</span>
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+
+</section>

@@ -1,0 +1,282 @@
+<app-notificacion></app-notificacion>
+
+<app-modal *ngIf="generalService.showingModals"></app-modal>
+
+<app-header [hidden]="!generalService.logueado"></app-header>
+
+<main [hidden]="!generalService.logueado">
+
+    <app-menu></app-menu>
+
+    <section class="cuerpo" [ngClass]="{'menu': generalService.menuVisible}">
+
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <!-- ZONA DE TABLA -->
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <section class="zonaTabla" [ngClass]="{'oculto': edicion || visualizacion}">
+
+            <h1 class="titulo">{{ 'general.administrators' | translate }}</h1>
+
+            <!-- FILTROS -->
+            <div class="accordion" id="accordionFiltros">
+                
+                <div class="card">
+                    <div class="card-header" id="cabeceraFiltros">
+                        <h2 class="mb-0 noselect" (click)="toggleFiltersCollapse()" data-toggle="collapse" data-target="#collapseFiltros" aria-expanded="false" aria-controls="collapseFiltros">
+                            <i class="fa fa-angle-down" [ngClass]="{'rotated': !filtersCollapsed}" aria-hidden="true"></i>{{ 'general.filters' | translate }}<span>{{ 'general.filtersClick' | translate }}</span>
+                        </h2>
+                    </div>
+              
+                    <div id="collapseFiltros" class="collapse" aria-labelledby="cabeceraFiltros" data-parent="#accordionFiltros">
+                        <div class="card-body">
+
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <div class="col-12 col-md elemento">
+                                        <i class="fa fa-times" (click)="resetInput('nombre')" aria-hidden="true"></i>
+                                        <input class="form-control form-control-lg" [(ngModel)]="filtros.nombre" name="nombre" type="text" placeholder="{{ 'tablas.name' | translate }}" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-12 col-md elemento">
+                                        <i class="fa fa-times" (click)="resetInput('apellidos')" aria-hidden="true"></i>
+                                        <input class="form-control form-control-lg" [(ngModel)]="filtros.apellidos" name="apellidos" type="text" placeholder="{{ 'tablas.lastName' | translate }}" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-12 col-md elemento">
+                                        <i class="fa fa-times" (click)="resetInput('nombreUsuario')" aria-hidden="true"></i>
+                                        <input class="form-control form-control-lg" [(ngModel)]="filtros.nombreUsuario" name="nombreUsuario" type="text" placeholder="{{ 'tablas.userName' | translate }}" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-12 col-md elemento">
+                                        <i class="fa fa-times" (click)="resetInput('email')" aria-hidden="true"></i>
+                                        <input class="form-control form-control-lg" [(ngModel)]="filtros.email" name="email" type="text" placeholder="{{ 'tablas.email' | translate }}" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-12 col-md">
+                                        <select [(ngModel)]="filtros.active" name="active" class="form-control form-control-lg" autocomplete="off">
+                                            <option value="-1" selected>{{ 'tablas.active' | translate }}</option>
+                                            <option value="1">{{ 'general.yes' | translate }}</option>
+                                            <option value="0">{{ 'general.no' | translate }}</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md elemento">
+                                        <i class="fa fa-times fecha" (click)="resetInput('fechaDesde')" aria-hidden="true"></i>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="filtros.fechaDesde" name="fechaDesde" placeholder="{{ 'general.dateFrom' | translate }}" ngbDatepicker #a="ngbDatepicker" autocomplete="off">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" (click)="a.toggle()">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-md elemento">
+                                        <i class="fa fa-times fecha" (click)="resetInput('fechaHasta')" aria-hidden="true"></i>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control form-control-lg" readonly [(ngModel)]="filtros.fechaHasta" name="fechaHasta" placeholder="{{ 'general.dateTo' | translate }}" ngbDatepicker #b="ngbDatepicker" autocomplete="off">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" (click)="b.toggle()">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="botones">
+                                <button type="button" (click)="resetFilters()" class="btn btn-outline-secondary btn-lg"><i class="fa fa-square-o" aria-hidden="true"></i> {{ 'general.cleanFilters' | translate }}</button>
+                                <button type="button" (click)="filtrar()" class="btn btn-primary btn-lg"><i class="fa fa-filter" aria-hidden="true"></i> {{ 'general.filter' | translate }}</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TABLA -->
+            <div class="preTable">
+                <div class="botones">
+                    <button (click)="crear()" class="btn btn-primary btn-lg"><i class="fa fa-plus" aria-hidden="true"></i> {{ 'administradores.addAdministrator' | translate }} </button>
+                </div>
+                <div class="info">
+                    <strong>{{ arraysDatosService.administradoresFiltrados.length }} </strong><span *ngIf="arraysDatosService.administradoresFiltrados.length!== 1">{{ 'general.results' | translate }}</span><span *ngIf="arraysDatosService.administradoresFiltrados.length === 1">{{ 'general.result' | translate }}</span>
+                </div>
+            </div>
+
+            <app-spinner *ngIf="arraysDatosService.administradoresFiltrados.length <= 0 && !iniciado"></app-spinner>
+
+            <div class="table-responsive" *ngIf="arraysDatosService.administradoresFiltrados.length > 0">
+
+                <table class="table table-hover tablaDatosPpal" [mfData]="arraysDatosService.administradoresFiltrados" #mf="mfDataTable" [mfRowsOnPage]="10" mfSortBy="fecha" mfSortOrder="desc">
+                    <thead>
+                        <tr>
+                            <th class="noselect"><mfDefaultSorter by="nombre">{{ 'tablas.name' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="apellidos">{{ 'tablas.lastName' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="nombreUsuario">{{ 'tablas.userName' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect"><mfDefaultSorter by="email">{{ 'tablas.email' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect" style="min-width: 70px;"><mfDefaultSorter by="fecha">{{ 'tablas.date' | translate }}</mfDefaultSorter></th>
+                            <th class="noselect" style="width: 100px;"><mfDefaultSorter by="active">{{ 'tablas.active' | translate }}</mfDefaultSorter></th>
+                            <th class="acciones noselect">{{ 'tablas.actions' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of mf.data; let index = index">
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.nombre }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.apellidos }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.nombreUsuario }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.email }}</td>
+                            <td [ngClass]="{'inactive': item.active === 0}" (click)="editarVisualizar(item.id,2)">{{ item.fecha | date: 'dd-MM-yyyy' }}</td>
+                            <td class="activar" [ngClass]="{'inactive': item.active === 0}">
+                                <i [ngClass]="{ 'hidden': !editando[item.id] }" class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                                <material-slide-toggle [ngClass]="{ 'hidden': editando[item.id] }" [checked]="item.active === 1" (change)="onChangeActivate($event,item.id)"></material-slide-toggle>
+                            </td>
+                            <td [ngClass]="{'inactive': item.active === 0}">
+                                <button (click)="editarVisualizar(item.id,1)"><i class="fa fa-pencil" placement="top" openDelay="1000" ngbTooltip="{{ 'general.edit' | translate }}" aria-hidden="true"></i></button>
+                                <button (click)="editarVisualizar(item.id,2)"><i class="fa fa-eye" placement="top" openDelay="1000" ngbTooltip="{{ 'general.view' | translate }}" aria-hidden="true"></i></button>
+                                <!-- <button (click)="generalService.modalIdElemento=item.id;generalService.abreModal('borrarAdministrador')"><i class="fa fa-trash" placement="top" openDelay="1000" ngbTooltip="{{ 'general.delete' | translate }}" aria-hidden="true"></i></button> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <mfBootstrapPaginator></mfBootstrapPaginator>
+                                <!-- <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator> -->
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+
+            <div class="noResults" *ngIf="arraysDatosService.administradoresFiltrados.length <= 0 && iniciado">
+                {{ 'general.noResults' | translate }}
+            </div>
+
+        </section><!-- Cierra <section class="tabla"> -->
+
+
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <!-- ZONA DE EDICIÓN O VISUALIZACIÓN -->
+        <!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+        <section *ngIf="edicion || visualizacion">
+
+            <h1 class="titulo">
+                <i (click)="volver()" class="fa fa-chevron-left" placement="top" openDelay="1000" ngbTooltip="{{ 'general.back' | translate }}" aria-hidden="true"></i>
+                <span *ngIf="edicion">{{ 'administradores.editAdministrator' | translate }}</span>
+                <span *ngIf="edicion" class="info">({{ 'general.asteriskRequired' | translate }}). </span>
+                <span *ngIf="visualizacion">{{ 'administradores.viewAdministrator' | translate }}</span>
+            </h1>
+
+            <div class="container-fluid">
+
+                <form (ngSubmit)="guardar(formEdit)" #formEdit="ngForm" (keypress)="onKeyup($event,formEdit)" role="form">
+
+                    <!-- EDICIÓN DATOS -->
+
+                    <div class="row">
+
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label for="nombreAdmin">{{ 'tablas.name' | translate }} *</label>
+                                <input class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoNombre.invalid}" #datoNombre="ngModel" type="text" id="nombreAdmin" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditAdministrador.nombre" name="nombre" autocomplete="off">
+                                <div *ngIf="formularioEnviado && datoNombre.invalid" class="invalid-feedback">
+                                    {{ 'errores.errorFieldRequired' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label for="apellidosAdmin">{{ 'tablas.lastName' | translate }} *</label>
+                                <input type="text" class="form-control form-control-lg" id="apellidosAdmin" [ngClass]="{'is-invalid': formularioEnviado && datoApellidos.invalid}" #datoApellidos="ngModel" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditAdministrador.apellidos" name="apellidos" autocomplete="off">
+                                <div *ngIf="formularioEnviado && datoApellidos.invalid" class="invalid-feedback">
+                                    {{ 'errores.errorFieldRequired' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label for="emailAdmin">{{ 'tablas.email' | translate }} *</label>
+                                <input type="email" class="form-control form-control-lg" id="emailAdmin" [ngClass]="{'is-invalid': formularioEnviado && datoemail.invalid}" #datoemail="ngModel" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required maxlength="60" [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditAdministrador.email" name="email" autocomplete="off">
+                                <div *ngIf="formularioEnviado && datoemail.invalid" class="invalid-feedback">
+                                    <div *ngIf="datoemail.errors.required">
+                                        {{ 'errores.errorFieldRequired' | translate }}
+                                    </div> 
+                                    <div *ngIf="datoemail.errors.pattern">
+                                        {{ 'errores.errorValidMail' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <div class="form-group">
+                                <label for="nomusuAdmin">{{ 'general.userName' | translate }} *</label>
+                                <input type="text" class="form-control form-control-lg" id="nomusuAdmin" [ngClass]="{'is-invalid': formularioEnviado && datonomUsu.invalid}" #datonomUsu="ngModel" required maxlength="60" [disabled]="visualizacion || (edicion && arraysDatosService.datosEditAdministrador.id != null)" [(ngModel)]="arraysDatosService.datosEditAdministrador.nombreUsuario" name="nombreUsuario" autocomplete="off">
+                                <div *ngIf="formularioEnviado && datonomUsu.invalid" class="invalid-feedback">
+                                    {{ 'errores.errorFieldRequired' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <label for="contraseniaAdmin">{{ 'general.password' | translate }} *</label>
+                            <div class="input-group">
+                                <!-- El select además del required contiene un pattern que exige que el password tenga al menos 8 caracteres pattern=".{8,}"" -->
+                                <input type="password" class="form-control form-control-lg" id="contraseniaAdmin" [ngClass]="{'is-invalid': formularioEnviado && datoContrasenia.invalid}" #datoContrasenia="ngModel" pattern=".{8,}" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditAdministrador.contrasenia" name="contrasenia" autocomplete="off">
+                                <!-- <div class="input-group-append" *ngIf="edicion"> -->
+                                <div class="input-group-append" *ngIf="false">
+                                    <span class="input-group-text" id="pass01" (click)="generalService.showHidePass('pass01')">
+                                        <i class="fa fa-eye-slash verpassword" placement="top" openDelay="1000" ngbTooltip="{{ 'general.showPassword' | translate }}" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div *ngIf="formularioEnviado && datoContrasenia.invalid" class="invalid-feedback">
+                                    <br>
+                                    <div *ngIf="datoContrasenia.errors.required">
+                                        {{ 'errores.errorFieldRequired' | translate }}
+                                    </div>                                    
+                                    <div *ngIf="datoContrasenia.errors.pattern">
+                                        {{ 'errores.errorPasswordCaracterNumber' | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-2">
+                            <label for="activeAdmin">{{ 'tablas.active' | translate }} *</label>
+                            <!-- El select además del required contiene un pattern que exige que el valor sea distinto de null pattern="^((?!null).)*$" -->
+                            <select id="activeAdmin" class="form-control form-control-lg" [ngClass]="{'is-invalid': formularioEnviado && datoActive.invalid}" #datoActive="ngModel" pattern="^((?!null).)*$" required [disabled]="visualizacion" [(ngModel)]="arraysDatosService.datosEditAdministrador.active" name="active" autocomplete="off">
+                                <option value="1">{{ 'general.yes' | translate }}</option>
+                                <option value="0">{{ 'general.no' | translate }}</option>
+                            </select>
+                            <div *ngIf="formularioEnviado && datoActive.invalid" class="invalid-feedback">
+                                {{ 'errores.errorFieldRequired' | translate }}
+                            </div>
+                        </div>
+
+                    </div><!-- Cierra <div class="row"> -->
+
+                    <div class="zonaBotones">
+                        <button (click)="volver()" class="btn btn-primary btn-lg"><i class="fa fa-chevron-left" aria-hidden="true"></i> {{ 'general.back' | translate }}</button>
+                        <button type="submit" *ngIf="edicion" class="btn btn-primary btn-lg"><i class="fa fa-floppy-o" aria-hidden="true"></i> {{ 'general.save' | translate }}</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </section><!-- <section class="cuerpo"> -->
+
+</main>

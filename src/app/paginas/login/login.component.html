@@ -1,0 +1,69 @@
+
+<app-notificacion></app-notificacion>
+
+<main class="portada" [hidden]="generalService.logueado">
+
+      
+    <section class="cajalogin">
+
+      <div class="logo noselect">
+          <img [src]="parametrosService.rutaLocalImg+'logo.png'">
+      </div>
+
+      <h1>{{ 'login.title' | translate }}</h1>
+
+      <div hidden>
+        <button (click)="generalService.useLanguage('es')" style="font-size: 1.4rem;">Español</button>&nbsp;&nbsp;
+        <button (click)="generalService.useLanguage('en')" style="font-size: 1.4rem;">Inglés</button>&nbsp;&nbsp;
+        <button (click)="generalService.getLanguage()" style="font-size: 1.4rem;">ver idioma</button>
+      </div>
+
+      <form (ngSubmit)="enviar(formLogin)" #formLogin="ngForm" (keypress)="onKeyup($event,formLogin)" role="form">
+
+
+        <div class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </span>
+          </div>
+          <input type="text" class="form-control" required [ngClass]="{'is-invalid': formularioEnviado && datoUser.invalid}" #datoUser="ngModel" [(ngModel)]="user" name="user" placeholder="{{ 'general.user' | translate }}" >
+        </div>                                 
+        <div *ngIf="formularioEnviado && datoUser.invalid" class="formAlert">
+          {{ 'errores.errorUserRequired' | translate }}
+        </div>
+
+
+        
+        
+
+        <div class="input-group input-group-lg">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa fa-lock" aria-hidden="true"></i>
+            </span>
+          </div>
+          <input type="password" class="form-control" required [ngClass]="{'is-invalid': formularioEnviado && datoPassword.invalid}" #datoPassword="ngModel" [(ngModel)]="password" name="password" placeholder="{{ 'general.password' | translate }}">
+          <div class="input-group-append">
+            <span class="input-group-text" id="pass01" (click)="generalService.showHidePass('pass01')">
+              <i class="fa fa-eye-slash verpassword" placement="top" openDelay="1000" ngbTooltip="{{ 'general.showPassword' | translate }}" aria-hidden="true"></i>
+              <!-- <i class="fa fa-eye verpassword" aria-hidden="true"></i> --> 
+            </span>           
+          </div>
+        </div>
+        <div *ngIf="formularioEnviado && datoPassword.invalid" class="formAlert">
+          {{ 'errores.errorUserRequired' | translate }}
+        </div>
+
+
+        <div class="acciones centrar">
+          <button type="submit" class="btn btn-lg btn-primary">{{ 'general.access' | translate }}</button>
+        </div>
+
+
+      </form>
+
+    </section>
+    
+    
+  </main>

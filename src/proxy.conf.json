@@ -1,0 +1,9 @@
+{
+  "/api/*": {
+  "target": "http://api.foodieangels-prewebs7.hps.es:9099/",
+  "secure": false,
+  "changeOrigin": true,
+  "logLevel": "debug",
+  "pathRewrite": {"^/api" : ""}
+  }
+}
